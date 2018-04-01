@@ -24,7 +24,19 @@ defmodule Hangman.Game do
 
 
   def accept_move(game, guess, _not_already_used) do
+    letter_set = MapSet.new(game.letters)
+
     Map.put(game, :used, MapSet.put(game.used, guess))
+    |> eval_move(guess, MapSet.member?(letter_set, guess))
+  end
+
+  def eval_move(game, guess, _correct_guess = true) do
+    Map.put(game, :game_state, :good_guess)
+  end
+
+
+  def eval_move(game, guess, _incorrect_guess = _) do
+    Map.put(game, :game_state, :bad_guess)
   end
 
   def tally(game) do

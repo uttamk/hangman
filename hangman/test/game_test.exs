@@ -17,4 +17,17 @@ defmodule GameTest do
     assert game.game_state == :already_used
 
   end
+
+
+  test "state when bad guess" do
+    {game, _} = Game.new_game("hello") |> Game.make_move("x")
+
+    assert game.game_state == :bad_guess
+  end
+
+  test "state when good guess" do
+    {game, _} = Game.new_game("hello") |> Game.make_move("h")
+
+    assert game.game_state == :good_guess
+  end
 end
