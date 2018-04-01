@@ -32,10 +32,11 @@ defmodule Hangman.Game do
 
   def accept_move(game, guess, _not_already_used) do
     letter_set = MapSet.new(game.letters)
-
-    Map.put(game, :used, MapSet.put(game.used, guess))
-    |> Map.put(:turns_left, game.turns_left - 1)
-    |> eval_move(guess, MapSet.member?(letter_set, guess))
+    %{game |
+        used: MapSet.put(game.used, guess),
+        turns_left: game.turns_left - 1
+     }
+     |> eval_move(guess, MapSet.member?(letter_set, guess))
   end
 
   def eval_move(game, guess, _correct_guess = true) do
