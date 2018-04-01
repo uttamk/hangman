@@ -3,7 +3,7 @@ defmodule DictionaryTest do
   doctest Dictionary
 
   test "word_list should return the list of words from the file system" do
-    expected_word_list = File.read!("assets/words.txt") |> String.split("\n")
+    expected_word_list = File.read!("../assets/words.txt") |> String.split("\n")
 
     word_list = Dictionary.word_list()
 
