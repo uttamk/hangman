@@ -30,4 +30,19 @@ defmodule GameTest do
 
     assert game.game_state == :good_guess
   end
+
+  test "state when game is lost" do
+    {game, _} = Game.new_game("it", 2) |> Game.make_move("h")
+    {game, _} = game |> Game.make_move("e")
+
+    assert game.game_state == :lost
+  end
+
+
+  test "state when game is won" do
+    {game, _} = Game.new_game("it", 2) |> Game.make_move("i")
+    {game, _} = game |> Game.make_move("t")
+
+    assert game.game_state == :won
+  end
 end
