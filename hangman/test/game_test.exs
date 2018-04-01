@@ -12,37 +12,30 @@ defmodule GameTest do
 
   test "state when same letter is guessed again" do
     {game, _} = Game.new_game("hello") |> Game.make_move("h")
-    {game, _} = game |> Game.make_move("h")
 
-    assert game.game_state == :already_used
-
+    assert {%{game_state: :already_used}, _} = game |> Game.make_move("h")
   end
 
 
   test "state when bad guess" do
-    {game, _} = Game.new_game("hello") |> Game.make_move("x")
-
-    assert game.game_state == :bad_guess
+    assert {%{game_state: :bad_guess}, _} = Game.new_game("hello") |> Game.make_move("x")
   end
 
   test "state when good guess" do
-    {game, _} = Game.new_game("hello") |> Game.make_move("h")
-
-    assert game.game_state == :good_guess
+    assert {%{game_state: :good_guess}, _} = Game.new_game("hello") |> Game.make_move("h")
   end
 
   test "state when game is lost" do
     {game, _} = Game.new_game("it", 2) |> Game.make_move("h")
-    {game, _} = game |> Game.make_move("e")
 
-    assert game.game_state == :lost
+    assert {%{game_state: :lost}, _} = game |> Game.make_move("e")
   end
 
 
   test "state when game is won" do
     {game, _} = Game.new_game("it", 2) |> Game.make_move("i")
-    {game, _} = game |> Game.make_move("t")
 
-    assert game.game_state == :won
+    assert {%{game_state: :won}, _} = game |> Game.make_move("t")
+
   end
 end
