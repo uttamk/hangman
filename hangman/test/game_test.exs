@@ -38,4 +38,8 @@ defmodule GameTest do
     assert {%{game_state: :won}, _} = game |> Game.make_move("t")
 
   end
+
+  test "tally when good guess" do
+     assert {_, %{game_state: :good_guess, letters: ["_", "_", "l", "l", "_"]}} = Game.new_game("hello") |> Game.make_move("l")
+    end
 end

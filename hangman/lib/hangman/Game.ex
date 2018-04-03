@@ -22,7 +22,8 @@ defmodule Hangman.Game do
   end
 
   def make_move(game, guess) do
-      {accept_move(game, guess, MapSet.member?(game.used, guess)), tally(game)}
+      game = accept_move(game, guess, MapSet.member?(game.used, guess))
+      {game, tally(game)}
   end
 
   def accept_move(game, guess,_already_used = true) do
@@ -61,7 +62,17 @@ defmodule Hangman.Game do
   def maybe_won(_), do: :good_guess
 
   def tally(game) do
-    game
+    %{
+      game_state: game.game_state,
+      letters: reveal_guesses(game.letters, game.used)
+    }
   end
+
+  def reveal_guesses(letters, used) do
+    letters |> Enum.map(fn letter -> reveal_letter(letter, MapSet.member?(used, letter)) end)
+  end
+
+  def reveal_letter(letter, _is_guessed = true), do: letter
+  def reveal_letter(_, _not_guessed), do: "_"
 
 end
