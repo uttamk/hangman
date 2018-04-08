@@ -2,10 +2,10 @@ defmodule DictionaryTest do
   use ExUnit.Case
   doctest Dictionary
 
-  test "word_list should return the list of words from the file system" do
+  test "start should return the list of words from the file system" do
     expected_word_list = File.read!("../assets/words.txt") |> String.split("\n")
 
-    word_list = Dictionary.word_list()
+    word_list = Dictionary.start()
 
 
     assert word_list == expected_word_list
