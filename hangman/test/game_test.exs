@@ -27,7 +27,7 @@ defmodule GameTest do
   test "state when game is lost" do
     {game, _} = Game.new_game("it", 2) |> Game.make_move("h")
 
-    assert {%{game_state: :lost}, _} = game |> Game.make_move("e")
+    assert {%{game_state: :lost, turns_left: 0}, _} = game |> Game.make_move("e")
   end
 
   test "state when game is won" do
@@ -37,7 +37,7 @@ defmodule GameTest do
   end
 
   test "tally when good guess" do
-    assert {_, %{game_state: :good_guess, letters: ["_", "_", "l", "l", "_"], turns_left: 6}} =
+    assert {_, %{game_state: :good_guess, letters: ["_", "_", "l", "l", "_"], turns_left: 7}} =
              Game.new_game("hello") |> Game.make_move("l")
   end
 
