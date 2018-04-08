@@ -18,7 +18,7 @@ defmodule Hangman.Game do
   end
 
   def new_game() do
-    %Hangman.Game{}
+    new_game(Dictionary.random_word(), 7)
   end
 
   def make_move(game, guess) do
@@ -26,53 +26,52 @@ defmodule Hangman.Game do
       {game, tally(game)}
   end
 
-  def accept_move(game, guess,_already_used = true) do
+  def tally(game) do
+    %{
+      game_state: game.game_state,
+      letters: reveal_guesses(game.letters, game.used),
+      turns_left: game.turns_left
+    }
+  end
+
+##########################################################################################################
+
+  defp accept_move(game, _guess,_already_used = true) do
     Map.put(game, :game_state, :already_used)
   end
 
 
-  def accept_move(game, guess, _not_already_used) do
+  defp accept_move(game, guess, _not_already_used) do
     letter_set = MapSet.new(game.letters)
     %{game |
         used: MapSet.put(game.used, guess),
         turns_left: game.turns_left - 1
      }
-     |> eval_move(guess, MapSet.member?(letter_set, guess))
+     |> eval_move(MapSet.member?(letter_set, guess))
   end
 
-  def eval_move(game, guess, _correct_guess = true) do
+  defp eval_move(game, _correct_guess = true) do
     letter_set = MapSet.new(game.letters)
-
-    new_state = maybe_won(MapSet.subset?(letter_set, game.used))
-
-    Map.put(game, :game_state, new_state)
+    %{game | game_state: maybe_won(MapSet.subset?(letter_set, game.used))}
   end
 
 
-  def eval_move(game, guess, _incorrect_guess = _) do
-    new_state = maybe_lost(game.turns_left)
-    Map.put(game, :game_state, new_state)
+  defp eval_move(game, _incorrect_guess) do
+    %{game | game_state: maybe_lost(game.turns_left)}
   end
 
-  def maybe_lost(_no_turns_left = 0), do: :lost
-  def maybe_lost(_turns_left_=_), do: :bad_guess
+  defp maybe_lost(_no_turns_left = 0), do: :lost
+  defp maybe_lost(_turns_left_=_), do: :bad_guess
 
 
-  def maybe_won(_all_letters_matched = true), do: :won
-  def maybe_won(_), do: :good_guess
+  defp maybe_won(_all_letters_matched = true), do: :won
+  defp maybe_won(_), do: :good_guess
 
-  def tally(game) do
-    %{
-      game_state: game.game_state,
-      letters: reveal_guesses(game.letters, game.used)
-    }
-  end
-
-  def reveal_guesses(letters, used) do
+  defp reveal_guesses(letters, used) do
     letters |> Enum.map(fn letter -> reveal_letter(letter, MapSet.member?(used, letter)) end)
   end
 
-  def reveal_letter(letter, _is_guessed = true), do: letter
-  def reveal_letter(_, _not_guessed), do: "_"
+  defp reveal_letter(letter, _is_guessed = true), do: letter
+  defp reveal_letter(_, _not_guessed), do: "_"
 
 end
