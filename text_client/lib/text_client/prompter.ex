@@ -1,6 +1,5 @@
 defmodule TextClient.Prompter do
   def accept_move(state) do
-    state =
       IO.gets("Your guess: ")
       |> String.replace("\n", "")
       |> check_input(state)
