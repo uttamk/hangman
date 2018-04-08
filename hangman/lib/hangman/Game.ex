@@ -30,7 +30,8 @@ defmodule Hangman.Game do
     %{
       game_state: game.game_state,
       letters: reveal_guesses(game.letters, game.used),
-      turns_left: game.turns_left
+      turns_left: game.turns_left,
+      letters_used: MapSet.to_list(game.used)
     }
   end
 

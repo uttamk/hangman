@@ -4,7 +4,9 @@ defmodule TextClient.Summary do
         "\n",
         "Word so far: #{Enum.join(tally.letters, " ")}",
         "\n",
-        "Turns left: #{tally.turns_left}"
+        "Turns left: #{tally.turns_left}",
+        "\n",
+        "Letters used: #{Enum.join(tally.letters_used, " ")}"
     ]
     state
   end
