@@ -2,6 +2,7 @@ defmodule GameTest do
   use ExUnit.Case
   doctest Hangman.Game
   alias Hangman.Game
+  @cant_reveal_word_error "[Error] Can't reveal word in the middle of a game"
 
   test "state when new game" do
     game = Game.new_game()
@@ -69,21 +70,21 @@ defmodule GameTest do
     game = Game.new_game("a", 1)
 
     assert :initializing = game.game_state
-    assert "[Error] Can't reveal word in the middle of a game" = Game.original_word(game)
+    assert @cant_reveal_word_error = Game.original_word(game)
   end
 
   test "original should not reveal when game is in good guess state" do
     {game, _} = Game.new_game("ab", 1) |> Game.make_move("a")
 
     assert :good_guess = game.game_state
-    assert "[Error] Can't reveal word in the middle of a game" = Game.original_word(game)
+    assert @cant_reveal_word_error = Game.original_word(game)
   end
 
   test "original should not reveal when game is in bad guess state" do
     {game, _} = Game.new_game("ab", 2) |> Game.make_move("x")
 
     assert :bad_guess = game.game_state
-    assert "[Error] Can't reveal word in the middle of a game" = Game.original_word(game)
+    assert @cant_reveal_word_error = Game.original_word(game)
   end
 
   test "original should not reveal when game is in already used state" do
@@ -91,6 +92,6 @@ defmodule GameTest do
     {game, _} = game |> Game.make_move("x")
 
     assert :already_used = game.game_state
-    assert "[Error] Can't reveal word in the middle of a game" = Game.original_word(game)
+    assert @cant_reveal_word_error = Game.original_word(game)
   end
 end
