@@ -18,4 +18,8 @@ defmodule Hangman.Server do
   def handle_call({:tally}, _from, game) do
     {:reply, Game.tally(game), game}
   end
+
+  def handle_call({:original_word}, _from, game) do
+    {:reply, Game.original_word(game), game}
+  end
 end

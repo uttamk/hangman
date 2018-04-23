@@ -42,7 +42,55 @@ defmodule GameTest do
   end
 
   test "tally when bad guess" do
-    assert {_, %{game_state: :bad_guess, letters: ["_", "_", "_", "_", "_"], turns_left: 6,  letters_used: ["x"]}} =
-             Game.new_game("hello") |> Game.make_move("x")
+    assert {_,
+            %{
+              game_state: :bad_guess,
+              letters: ["_", "_", "_", "_", "_"],
+              turns_left: 6,
+              letters_used: ["x"]
+            }} = Game.new_game("hello") |> Game.make_move("x")
+  end
+
+  test "original word when state is lost" do
+    {game, _} = Game.new_game("a", 1) |> Game.make_move("b")
+
+    assert :lost = game.game_state
+    "a" = Game.original_word(game)
+  end
+
+  test "original word when state is won" do
+    {game, _} = Game.new_game("a", 1) |> Game.make_move("a")
+
+    assert :won = game.game_state
+    "a" = Game.original_word(game)
+  end
+
+  test "original should not reveal when game is initializing" do
+    game = Game.new_game("a", 1)
+
+    assert :initializing = game.game_state
+    assert "[Error] Can't reveal word in the middle of a game" = Game.original_word(game)
+  end
+
+  test "original should not reveal when game is in good guess state" do
+    {game, _} = Game.new_game("ab", 1) |> Game.make_move("a")
+
+    assert :good_guess = game.game_state
+    assert "[Error] Can't reveal word in the middle of a game" = Game.original_word(game)
+  end
+
+  test "original should not reveal when game is in bad guess state" do
+    {game, _} = Game.new_game("ab", 2) |> Game.make_move("x")
+
+    assert :bad_guess = game.game_state
+    assert "[Error] Can't reveal word in the middle of a game" = Game.original_word(game)
+  end
+
+  test "original should not reveal when game is in already used state" do
+    {game, _} = Game.new_game("ab", 2) |> Game.make_move("x")
+    {game, _} = game |> Game.make_move("x")
+
+    assert :already_used = game.game_state
+    assert "[Error] Can't reveal word in the middle of a game" = Game.original_word(game)
   end
 end

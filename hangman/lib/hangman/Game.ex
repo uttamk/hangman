@@ -1,4 +1,5 @@
 defmodule Hangman.Game do
+  alias Hangman.Game
   defstruct(
     letters: [],
     game_state: :initializing,
@@ -34,6 +35,10 @@ defmodule Hangman.Game do
       letters_used: MapSet.to_list(game.used)
     }
   end
+
+  def original_word(%Game{game_state: :won, letters: letters}), do: Enum.join(letters)
+  def original_word(%Game{game_state: :lost, letters: letters}), do: Enum.join(letters)
+  def original_word(_in_progress_game), do: "[Error] Can't reveal word in the middle of a game"
 
   ##########################################################################################################
 

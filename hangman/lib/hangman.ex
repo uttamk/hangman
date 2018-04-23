@@ -11,4 +11,8 @@ defmodule Hangman do
   def tally(game_pid) do
     GenServer.call(game_pid, {:tally})
   end
+
+  def original_word(game_pid) do
+    GenServer.call(game_pid, {:original_word})
+  end
 end

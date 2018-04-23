@@ -1,9 +1,16 @@
 defmodule TextClient.Player do
   alias TextClient.{State, Summary, Prompter, Mover}
 
-  def play(_state = %State{tally: %{game_state: :lost}}) do
-    exit_with_message(["Sorry, you lost the game !","\n"])
+  def play(_state = %State{tally: %{game_state: :lost}, game_service: gs}) do
+    original_word = Hangman.original_word(gs)
+
+    exit_with_message([
+      "Sorry, you lost the game !",
+      "\n",
+      "The original word was #{original_word}"
+    ])
   end
+
   def play(_state = %State{tally: %{game_state: :won, letters: letters}}) do
     exit_with_message("#{Enum.join(letters, " ")}\nCongratulations, you won the game!")
   end
@@ -26,15 +33,15 @@ defmodule TextClient.Player do
 
   def continue(state) do
     state
-      |> Summary.display()
-      |> Prompter.accept_move()
-      |> Mover.move()
-      |> play()
+    |> Summary.display()
+    |> Prompter.accept_move()
+    |> Mover.move()
+    |> play()
   end
 
   defp continue_with_message(state, msg) do
-      IO.puts(msg)
-      continue(state)
+    IO.puts(msg)
+    continue(state)
   end
 
   defp exit_with_message(msg) do
