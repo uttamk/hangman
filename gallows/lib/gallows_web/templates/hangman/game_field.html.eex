@@ -1,6 +1,6 @@
 <html>
     <p>
-    <%= game_state(@tally) %>
+    <%= game_state(@tally, @original_word) %>
     <p>
 
     <div class="row">
