@@ -9,7 +9,7 @@
          <%=new_game(@conn) %>
        <% else %>
         <%= form_for(@conn, hangman_path(@conn, :make_move), [as: :make_move, method: :put], fn form ->  %>
-            <%= text_input(form, :guess) %>
+            <%= text_input(form, :guess, autofocus: true) %>
             <%= submit("Make Move") %>
         <% end)%>
   <% end %>
