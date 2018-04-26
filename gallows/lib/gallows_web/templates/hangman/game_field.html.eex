@@ -9,9 +9,12 @@
     <p>
             Word so far: <%= @tally.letters |> Enum.join("        ")%>
     </p>
-
-      <%= form_for(@conn, hangman_path(@conn, :make_move), [as: :make_move, method: :put], fn form ->  %>
-      <%= text_input(form, :guess) %>
-      <%= submit("Make Move") %>
-  <% end)%>
+       <%= if game_over?(@tally) do %> 
+         <%=new_game(@conn) %>
+       <% else %>
+        <%= form_for(@conn, hangman_path(@conn, :make_move), [as: :make_move, method: :put], fn form ->  %>
+            <%= text_input(form, :guess) %>
+            <%= submit("Make Move") %>
+        <% end)%>
+  <% end %>
 </html>
